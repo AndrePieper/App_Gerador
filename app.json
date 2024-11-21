@@ -1,0 +1,44 @@
+{
+  "expo": {
+    "name": "appGerador",
+    "slug": "appGerador",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Este aplicativo precisa acessar sua galeria para selecionar uma imagem.",
+        "NSCameraUsageDescription": "Este aplicativo precisa acessar sua câmera para tirar fotos."
+      }
+    },
+    "android": {
+      "permissions": [
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE",
+        "CAMERA"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.Andre_Pieper.appGerador"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "725d0b6d-2f17-4add-811b-5ffbde332278"
+      }
+    },
+    "owner": "Andre_Pieper"
+  }
+}
