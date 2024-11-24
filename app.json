@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "appGerador",
-    "slug": "appGerador",
+    "slug": "app-gerador",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -36,9 +36,9 @@
     },
     "extra": {
       "eas": {
-        "projectId": "725d0b6d-2f17-4add-811b-5ffbde332278"
+        "projectId": "a6b6b30c-8786-43cb-95a4-999a6dbe3bd9"
       }
     },
-    "owner": "Andre_Pieper"
+    "owner": "andre_pieper"
   }
 }

@@ -22,7 +22,7 @@ export default function TelaInicial({ navigation }) {
   // decode jwt 
   const decode_Token = (token) => {
     try {
-      // padronizaçao para base 64
+      // padronizacao para base 64
       const [, payload] = token.split('.');
       const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
       const base64F = base64.padEnd(base64.length + (4 - (base64.length % 4)) % 4, '=');
@@ -34,7 +34,7 @@ export default function TelaInicial({ navigation }) {
     }
   };
 
-  // informações do usuário
+  // informacoes do usuario
   useEffect(() => {
     const Info_Usuario = async () => {
       try {
@@ -44,13 +44,13 @@ export default function TelaInicial({ navigation }) {
         setToken(tokenSalvo);
 
         if (tokenSalvo) {
-          const tokenDecodificado =  decode_Token(tokenSalvo);
-          if (tokenDecodificado) {
-            console.log(tokenDecodificado);
-            setNomeUsuario(tokenDecodificado.nome || '');
-            setCpfUsuario(tokenDecodificado.cpf || '');
-            setRaUsuario(tokenDecodificado.ra || '');
-            await AsyncStorage.setItem('@id_aluno', tokenDecodificado.id.toString()); 
+          const DadosToken =  decode_Token(tokenSalvo);
+          if (DadosToken) {
+            console.log(DadosToken);
+            setNomeUsuario(DadosToken.nome || '');
+            setCpfUsuario(DadosToken.cpf || '');
+            setRaUsuario(DadosToken.ra || '');
+            await AsyncStorage.setItem('@id_aluno', DadosToken.id.toString()); 
           } else {
             setErroToken('Token inválido ou expirado');
           }
@@ -87,32 +87,28 @@ export default function TelaInicial({ navigation }) {
         />
       </TouchableOpacity>
 
-      <View style={styles.cartao}>
-        <View style={styles.viewInicial}>
+      <View style={styles.card}>
+        <View>
           {nomeUsuario ? <Text style={styles.texto}>{`Nome: ${nomeUsuario}`}</Text> : null}
           {cpfUsuario ? <Text style={styles.texto}>{`CPF: ${cpfUsuario}`}</Text> : null}
           {raUsuario ? <Text style={styles.texto}>{`Matrícula: ${raUsuario}`}</Text> : null}
-          {erroToken ? <Text style={styles.textoErro}>{erroToken}</Text> : null}
+          {erroToken ? <Text style={styles.erro}>{erroToken}</Text> : null}
         </View>
       </View>
 
       <TouchableOpacity onPress={() => navigation.navigate('Gerador')}>
         <View style={styles.botaoPadrao}>
-          <Text style={styles.textoBotao}>QR Code</Text>
+          <Text style={styles.botaoPadraoTexto}>QR Code</Text>
         </View>
       </TouchableOpacity>
 
       <View style={styles.rodape}>
-        <View style={styles.rodapeLinha}>
-          <View></View>
+          <View style={styles.rodapeRow}>
+            <View style={styles.rodapeLinha}></View>
+            <Text style={styles.rodapeTexto}>Chamada Fasipe</Text>
+            <View style={styles.rodapeLinha}></View>
+          </View>
         </View>
-        <View style={styles.rodapeCentro}>
-          <Text style={styles.textoRodape}>Chamada Fasipe</Text>
-        </View>
-        <View style={styles.rodapeLinha}>
-          <View></View>
-        </View>
-      </View>
     </Container>
   );
 }
@@ -121,7 +117,7 @@ const styles = StyleSheet.create({
   avatar: {
     marginBottom: 20,
   },
-  cartao: {
+  card: {
     backgroundColor: '#fff',
     padding: 20,
     borderRadius: 10,
@@ -133,16 +129,14 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  viewInicial: {
-    alignItems: 'center',
-  },
+
   texto: {
     color: '#000000',
     fontSize: 20,
     marginBottom: 5,
     textAlign: 'center',
   },
-  textoErro: {
+  erro: {
     color: 'red',
     fontSize: 16,
     marginTop: 10,
@@ -163,8 +157,8 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  textoBotao: {
-    color: "#000000",
+  botaoPadraoTexto: {
+    color: "#fff",
     fontSize: 18,
   },
   rodape: {
@@ -173,9 +167,12 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 25,
-    flexDirection: 'row', 
-    justifyContent: 'center', 
-    alignItems: 'center', 
+  },
+  rodapeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 5, 
   },
   rodapeLinha: {
     borderBottomWidth: 2,
@@ -183,11 +180,7 @@ const styles = StyleSheet.create({
     width: '20%', 
     marginHorizontal: 5, 
   },
-  rodapeCentro: {
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  textoRodape: {
+  rodapeTexto: {
     color: "#000",
     textAlign: "center",
     fontSize: 16,

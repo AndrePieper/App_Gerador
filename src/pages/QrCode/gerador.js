@@ -12,20 +12,19 @@ export default function GeradorQRCode({ navigation }) {
 
   // Carrega o ID do aluno para montar o QR Code
   useEffect(() => {
-    const carregarIdAluno = async () => {
+    const IDaluno = async () => {
       try {
         const id = await AsyncStorage.getItem('@id_aluno');
         setIdAluno(id);
-        console.log('ID recuperado do AsyncStorage:', id);
       } catch (erro) {
         console.error(erro);
       }
     };
 
-    carregarIdAluno();
+    IDaluno();
   }, []);
 
-  // Atualiza a hora a cada 5 segundos a
+  // Atualiza a hora a cada 5 segundos 
   useEffect(() => {
     const intervaloHora = setInterval(() => {
       const novaHora = moment().tz('America/Cuiaba'); // .format('YYYY-MM-DDTHH:mm:ss');
@@ -90,7 +89,7 @@ const estilos = StyleSheet.create({
     elevation: 5,
   },
   botaoPadraoTexto: {
-    color: '#000000',
+    color: '#fff',
     fontSize: 18,
   },
 });

@@ -6,36 +6,49 @@ import * as Device from 'expo-device';
 import axios from 'axios';
 import grupoFasipe from './grupo-fasipe.png';
 import { Form } from '@unform/mobile';
-import { Aviso, BoxForm, Container } from './styles';
+import { BoxForm, Container } from './styles';
 
 export default function Login({ navigation }) {
   const formRef = useRef(null);
   const [Sev, setSev] = useState(null);
   const [DadosLogin, setDadosLogin] = useState({});
   const [carregando, setCarregando] = useState(false);
-  const [FormValues, setFormValues] = useState({});
   const [imei, setImei] = useState('1');
   const [mensagemErro, setMensagemErro] = useState(''); 
   const [tecladoVisivel, setTecladoVisivel] = useState(false);
 
-  // Pega o buildID para validar ou registrar
   useEffect(() => {
+    // Pega o buildID para validar ou registrar
     const obterImei = () => {
-      const imeiDispositivo = Device.osInternalBuildId || '1'; //coloca 1 quando for null para poder testar
+      const imeiDispositivo = Device.osInternalBuildId || '1'; // coloca 1 quando for null
       setImei(imeiDispositivo);
     };
-    obterImei();
-  }, []);
-
-  // Adc imei
+    obterImei(); 
+  
+    // Confere o estado do teclado
+    const MostrarTeclado = Keyboard.addListener('keyboardDidShow', () => {
+      setTecladoVisivel(true);
+    });
+    const EsconderTeclado = Keyboard.addListener('keyboardDidHide', () => {
+      setTecladoVisivel(false);
+    });
+  
+    return () => {
+      EsconderTeclado.remove();
+      MostrarTeclado.remove();
+    };
+  }, []); 
+  
+  // Adiciona BiuldID como IMEI aos dados de login
   useEffect(() => {
     if (imei) {
       setDadosLogin((prevValues) => ({
         ...prevValues,
-        imei,  
+        imei,
       }));
     }
-  }, [imei]);
+  }, [imei]); 
+  
 
   // Dados do input email e senha
   function Texto_Input(input) {
@@ -44,21 +57,6 @@ export default function Login({ navigation }) {
       [input.name]: input.value,
     }));
   }
-
-  // Confere o estado do teclado
-  useEffect(() => {
-    const MostrarTeclado = Keyboard.addListener('keyboardDidShow', () => {
-      setTecladoVisivel(true); 
-    });
-    const EsconderTeclado = Keyboard.addListener('keyboardDidHide', () => {
-      setTecladoVisivel(false); 
-    });
-
-    return () => {
-      EsconderTeclado.remove();
-      MostrarTeclado.remove();
-    };
-  }, []);
 
   async function Logar() {
     console.log(DadosLogin);  
@@ -79,7 +77,7 @@ export default function Login({ navigation }) {
             navigation.navigate('Home');
           } else {
             setSev("erro");
-            setMensagemErro("Resposta da Api não contem o tokem");
+            setMensagemErro("Token não encontrado");
           }
         } else {
           setSev("erro");
@@ -122,7 +120,7 @@ export default function Login({ navigation }) {
           />
 
           {Sev === "erro" && mensagemErro && (
-            <Text style={styles.errorText}>
+            <Text style={styles.erro}>
               {mensagemErro}
             </Text>
           )}
@@ -130,23 +128,23 @@ export default function Login({ navigation }) {
           <TouchableOpacity onPress={() => {
             formRef.current.submitForm();
           }}>
-            <View style={styles.button}>
-              <Text style={styles.buttonText}>Entrar</Text> 
+            <View style={styles.botaoPadrao}>
+              <Text style={styles.botaoPadraoTexto}>Entrar</Text> 
             </View>
           </TouchableOpacity>
 
           {carregando && (
-            <ActivityIndicator size="large" color="#00913D" style={styles.loader} />
+            <ActivityIndicator size="large" color="#00913D" style={styles.carregar} />
           )}
         </Form>
       </BoxForm>
 
       {!tecladoVisivel && (
-        <View style={styles.footer}>
-          <View style={styles.footerRow}>
-            <View style={styles.footerLine}></View>
-            <Text style={styles.footerText}>Chamada Fasipe</Text>
-            <View style={styles.footerLine}></View>
+        <View style={styles.rodape}>
+          <View style={styles.rodapeRow}>
+            <View style={styles.rodapeLinha}></View>
+            <Text style={styles.rodapeTexto}>Chamada Fasipe</Text>
+            <View style={styles.rodapeLinha}></View>
           </View>
         </View>
       )}
@@ -178,12 +176,12 @@ const styles = StyleSheet.create({
     margin: 5,
     padding: 10
   },
-  errorText: {
+  erro: {
     color: 'red',
     textAlign: 'center',
     marginVertical: 10,
   },
-  button: {
+  botaoPadrao: {
     backgroundColor: "#00913D",
     alignItems: 'center',
     padding: 15,
@@ -193,34 +191,34 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     marginBottom: 20,
   },
-  buttonText: {
-    color: "#000000",
+  botaoPadraoTexto: {
+    color: "#fff",
     fontSize: 18,
   },
-  loader: {
+  carregar: {
     marginBottom: 10,
     marginTop: 10,
   },
-  footer: {
+  rodape: {
     position: 'absolute',
     flex: 0.1,
     left: 0,
     right: 0,
     bottom: 25,
   },
-  footerRow: {
+  rodapeRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingVertical: 5, 
   },
-  footerLine: {
+  rodapeLinha: {
     borderBottomWidth: 2,
     borderColor: "#000",
     width: '20%', 
     marginHorizontal: 5, 
   },
-  footerText: {
+  rodapeTexto: {
     color: "#000",
     textAlign: "center",
     fontSize: 16,
